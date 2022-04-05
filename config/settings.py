@@ -12,8 +12,10 @@ from pathlib import Path
 
 from configurations import Configuration, values
 from dotenv import load_dotenv, find_dotenv
+from django.utils.timezone import timedelta
 
-load_dotenv(find_dotenv)
+
+load_dotenv(find_dotenv())
 
 
 class Common(Configuration):
@@ -41,7 +43,7 @@ class Common(Configuration):
         'django_extensions',
         'debug_toolbar',
 
-        'config.users',
+        'accounts',
     ]
 
     MIDDLEWARE = [
@@ -121,6 +123,62 @@ class Common(Configuration):
     DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
     AUTH_USER_MODEL = 'account.User'
+    
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    DEFAULT_FROM_EMAIL = "Zara from Hauzrent <hello@getmobile.tech>"
+
+    DJOSER = {
+        "USER_ID_FIELD" : "id",
+        'LOGIN_FIELD': 'email',
+        'USER_CREATE_PASSWORD_RETYPE': True,
+        'USERNAME_CHANGED_EMAIL_CONFIRMATION':True,
+        'PASSWORD_CHANGED_EMAIL_CONFIRMATION':True,
+        'SEND_ACTIVATION_EMAIL':False,
+        'SEND_CONFIRMATION_EMAIL':False,
+        'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+        'USERNAME_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+        'ACTIVATION_URL' : 'activate/{uid}/{token}',
+        'SERIALIZERS':{
+            'user_create': 'accounts.serializers.UserCreateSerializer',
+            'user': 'accounts.serializers.UserCreateSerializer',
+            'user_delete': 'djoser.serializers.UserDeleteSerializer'
+        }        
+        
+    }
+
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'rest_framework_simplejwt.authentication.JWTAuthentication',
+        ),
+    }
+
+    SIMPLE_JWT = {
+        'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+        'REFRESH_TOKEN_LIFETIME': timedelta(days=5),
+        'UPDATE_LAST_LOGIN': True,
+        'SIGNING_KEY': SECRET_KEY,
+        'AUTH_HEADER_TYPES': ('Bearer',),
+        'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+        'ROTATE_REFRESH_TOKENS': True,
+        'BLACKLIST_AFTER_ROTATION': True,
+        
+
+    }
+
+    #Cors headers
+    CORS_ORIGIN_ALLOW_ALL = True
+    CORS_ALLOW_ALL_ORIGINS = True
+    CORS_ALLOW_CREDENTIALS = True
+
+    SWAGGER_SETTINGS = {
+        'SECURITY_DEFINITIONS': {
+            'Bearer': {
+                'type': 'apiKey',
+                'name': 'Authorization',
+                'in': 'header'
+            }
+            }
+        }
 
 
 class Development(Common):

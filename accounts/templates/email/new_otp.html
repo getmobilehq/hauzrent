@@ -4,7 +4,7 @@
 
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Welcome Email</title>
+  <title>New OTP</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style type="text/css">
   /**
@@ -176,36 +176,13 @@
           <!-- start copy -->
           <tr>
             <td bgcolor="#ffffff" align="left" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <h1 style="margin: 0 0 12px; font-size: 32px; font-weight: 400; line-height: 48px;">Welcome, {{first_name}}!</h1>
-              <p style="margin: 0;">You have just been added as an administrator on the smart parcel platform.<br>Kindly find your login details below: <strong>Email: {{email}}<br>Password: {{password}}</strong>
+              <h1 style="margin: 0 0 12px; font-size: 32px; font-weight: 400; line-height: 48px;">Hi, {{first_name}}!</h1>
+              <p style="margin: 0;"> New OTP to complete your verification on {{site_name}} is: <strong>{{code}}</strong><br>Expires in 5 minutes!
             </td>
           </tr>
-          <!-- end copy -->
-
-          {% comment %} <!-- start button -->
-          <tr>
-            <td align="left" bgcolor="#ffffff">
-              <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                <tr>
-                  <td align="center" bgcolor="#ffffff" style="padding: 12px;">
-                    <table border="0" cellpadding="0" cellspacing="0">
-                      <tr>
-                        <td align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
-                          <a href="https://sendgrid.com" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Do Something Sweet</a>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <!-- end button --> {% endcomment %}
-
-          <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-bottom: 3px solid #d4dadf">
-              <p style="margin: 0;">Thanks,<br>Smart Parcel Admin</p>
+              <p style="margin: 0;">Cheers,<br> {{site_name}} Team</p>
             </td>
           </tr>
           <!-- end copy -->
@@ -233,7 +210,7 @@
           <!-- start permission -->
           <tr>
             <td align="center" bgcolor="#e9ecef" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
-              <p style="margin: 0;">You received this email because you signed up on <a href="{{url}}" target="_blank" rel="noopener noreferrer">smart parcel</a></p>
+              <p style="margin: 0;">You received this email because you signed up on the  <a href="{{url}}" target="_blank" rel="noopener noreferrer">{{site_name}}</a></p>
             </td>
           </tr>
           <!-- end permission -->
