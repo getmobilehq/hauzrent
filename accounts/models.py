@@ -16,34 +16,21 @@ import uuid
 
 class User(AbstractBaseUser, PermissionsMixin):
     
-    ROLE_CHOICES = (
+    USER_TYPE = (
         ('admin', 'Admin'),
-        ('bay_admin', 'Bay Admin'),
-        ('shipping_admin', 'Shipping Admin'),
-        ('user', 'User')
+        ('landlord', 'Landlord'),
+        ('tenant', 'Tenant'),
     )    
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+2341234567890'. Up to 15 digits allowed.")
     
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     first_name    = models.CharField(_('first name'),max_length = 250)
     last_name     = models.CharField(_('last name'),max_length = 250)
-    role          = models.CharField(_('role'), max_length = 250, choices=ROLE_CHOICES)
     email         = models.EmailField(_('email'), unique=True)
     phone         = models.CharField(_('phone'), max_length = 20, unique = True, validators=[phone_regex])
-    user_type = models.CharField(_("user type"), max_length=300, null=True, blank=True)
-    company_name = models.CharField(_("company name"), max_length=300, null=True, blank=True)
+    user_type = models.CharField(_("user type"), max_length=300, choices=USER_TYPE)
     address       = models.CharField(_('address'), max_length = 250, null = True)
     password      = models.CharField(_('password'), max_length=300)
-    shipping_company = models.ForeignKey(
-        to=ShippingCompany,
-        on_delete=models.CASCADE, 
-        related_name="shipping_admins", 
-        null=True)
-    bay_area = models.ForeignKey(
-        to=BayArea,
-        on_delete=models.CASCADE, 
-        related_name="bay_admins", 
-        null=True)
     is_staff      = models.BooleanField(_('staff'), default=False)
     is_admin      = models.BooleanField(_('admin'), default= False)
     is_active     = models.BooleanField(_('active'), default=True)
@@ -56,10 +43,6 @@ class User(AbstractBaseUser, PermissionsMixin):
                        'last_name', 
                        'phone', 
                        'address',
-                       'role',
-                       'shipping_company',
-                       'bay_area',
-                       'company_name',
                        'user_type'
                        ]
 
@@ -68,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _('users')
 
     def __str__(self):
-        return f"{self.email} -- {self.role}"
+        return f"{self.email} -- {self.user_type}"
     
     def delete(self):
         self.is_active = False

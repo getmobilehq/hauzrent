@@ -7,7 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAdminUser
 from django.contrib.auth import get_user_model
 from .helpers.generators import generate_password
-from .permissions import IsShippingAdmin
+from .permissions import IsAdminorReadOnly, IsShippingAdmin, IsSuperAdminorReadOnly
 from rest_framework.exceptions import PermissionDenied, AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -21,10 +21,10 @@ User = get_user_model()
 @swagger_auto_schema(methods=['POST'], request_body=CustomUserSerializer())
 @api_view(['POST', 'GET'])
 @authentication_classes([JWTAuthentication])
-@permission_classes([IsAdminUser])
-def shipping_admin(request):
+@permission_classes([IsSuperAdminorReadOnly])
+def admin(request):
     if request.method=="GET":
-        objs = User.objects.filter(is_active=True, role="shipping_admin")
+        objs = User.objects.filter(is_active=True, user_type="admin")
         serializer = CustomUserSerializer(objs, many=True)
         
         data = {"message":"success",
@@ -41,6 +41,7 @@ def shipping_admin(request):
             serializer.validated_data['password'] = generate_password()
             serializer.validated_data['is_active'] = True
             serializer.validated_data['is_admin'] = True
+            serializer.validated_data['user_type'] = "admin"
             serializer.save()
             
             data = {
@@ -59,48 +60,6 @@ def shipping_admin(request):
 
             return Response(data, status = status.HTTP_400_BAD_REQUEST)
         
-        
-
-@swagger_auto_schema(methods=['POST'], request_body=CustomUserSerializer())
-@api_view(['POST', 'GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsShippingAdmin])
-def bay_admin(request):
-    
-    if request.method=="GET":
-        objs = User.objects.filter(is_active=True, role="bay_admin")
-        serializer = CustomUserSerializer(objs, many=True)
-        
-        data = {"message":"success",
-                "data" : serializer.data}
-            
-        return Response(data, status=status.HTTP_200_OK)
-    
-    elif request.method=="POST":
-        
-        serializer = CustomUserSerializer(data=request.data)
-        if serializer.is_valid():
-            
-            serializer.validated_data['password'] = generate_password()
-            serializer.validated_data['is_active'] = True
-            serializer.validated_data['is_admin'] = True
-            serializer.save()
-            
-            data = {
-                'message' : "success",
-                'data' : serializer.data,
-            }
-
-            return Response(data, status = status.HTTP_201_CREATED)
-
-        else:
-            data = {
-
-                'message' : "failed",
-                'error' : serializer.errors,
-            }
-
-            return Response(data, status = status.HTTP_400_BAD_REQUEST)
         
 
 
