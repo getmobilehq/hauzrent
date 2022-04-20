@@ -43,7 +43,16 @@ class Common(Configuration):
         'django_extensions',
         'debug_toolbar',
 
+        # Local_Apps
         'accounts',
+        'apartments',
+        'transactions',
+
+        # Third_party_Apps
+
+        'rest_framework',
+        'drf_yasg.utils'
+
     ]
 
     MIDDLEWARE = [
