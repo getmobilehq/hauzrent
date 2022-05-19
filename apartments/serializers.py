@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .model import Apartment
+from .models import Apartment
 
 class ApartmentSerializer(serializers.ModelSerializer):
 
